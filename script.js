@@ -89,6 +89,7 @@ function handleSubmit() {
     while (currentPasswordturn.length < length) {
         currentPasswordturn += getRandomSpecialCharacter();
     }
+//ciao
 
     // Aggiorna la variabile globale con la password finale
     currentPassword = currentPasswordturn;

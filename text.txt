@@ -1,0 +1,231 @@
+
+// Separa le costanti dalla logica di business
+
+const nameInput = document.querySelector("#nameInput");
+const surnameInput = document.querySelector("#surnameInput");
+const outputPass = document.querySelector("#outputName");
+
+let currentPassword = ""; // Variabile per memorizzare l'ultima password generata
+
+// Seleziona il bottone e aggiungi un event listener 
+document.querySelector("#submitBtn").addEventListener("click", handleSubmit);
+document.querySelector("#copyBtn").addEventListener("click", copyPassword);
+
+// Funzione per ottenere un numero intero casuale tra Min e Max (inclusi)
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Funzione per validare l'input
+function validateInput(name, surname) {
+    if (!name || !surname) {
+        outputPass.textContent = "I campi non possono essere vuoti";
+        return false;  // Restituisce false se l'input non è valido
+    }
+    return true;  // Restituisce true se l'input è valido
+}
+
+// Funzione per ripulire il form
+function cleanForm() {
+    nameInput.value = "";
+    surnameInput.value = "";
+}
+
+
+// Funzione per mescolare le lettere di una stringa
+
+/*
+ l'algoritmo di Fisher-Yates 
+Ciclo for: Iniziamo dal fondo dell'array e ci muoviamo verso l'inizio. Questo è importante per garantire che ogni carattere venga mescolato in modo casuale.
+
+Math.random(): Questa funzione genera un numero decimale casuale tra 0 e 1.
+
+Math.floor(Math.random() * (i + 1)): Questo calcolo restituisce un numero intero casuale tra 0 e i (inclusi). Questo numero viene utilizzato come indice per mescolare gli elementi.
+
+Se i è 2, Math.random() * (i + 1) genererà un numero tra 0 e 2, quindi Math.floor convertirà questo numero in 0, 1 o 2.
+
+Scambio di elementi: La riga [arr[i], arr[j]] = [arr[j], arr[i]] scambia gli elementi dell'array nei due indici i e j. Questo è un modo comune per scambiare valori in JavaScript.
+*/
+function shuffleString(str) {
+    const arr = str.split(""); // Converte la stringa in un array di caratteri
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // Ottiene un indice casuale
+        [arr[i], arr[j]] = [arr[j], arr[i]]; // Scambia i caratteri
+    }
+    return arr.join(""); // Ritorna l'array come stringa
+}
+
+
+// Funzione che gestisce il submit
+function handleSubmit() {
+    const name = nameInput.value.trim();
+    const surname = surnameInput.value.trim();
+
+    if (!validateInput(name, surname)) {
+        return;
+    }
+
+    const numberRandom = getRandomInt(10, 99);
+    
+    // Se l'input è valido, genera la password
+    currentPassword = `${name}${surname}${numberRandom}`; // Aggiorna currentPassword
+
+    
+    const shuffledPassword = shuffleString(currentPassword); 
+    outputPass.textContent =`La tua password è: ${shuffledPassword}`;
+    
+    cleanForm();
+    
+         // Mostra il pulsante "Copia"
+         copyBtn.style.display = "block";
+}
+
+// Funzione per copiare la password
+function copyPassword() {
+    if (currentPassword) {
+        navigator.clipboard.writeText(currentPassword)
+            .then(() => {
+                alert("Password copiata negli appunti!");
+            })
+            .catch(err => {
+                console.error("Errore nella copia: ", err);
+            });
+    } else {
+        alert("Genera prima una password!");
+    }
+}
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+console.log("ou");
+
+// Separa le costanti dalla logica di business
+const nameInput = document.querySelector("#nameInput");
+const surnameInput = document.querySelector("#surnameInput");
+const lengthInput = document.querySelector("#lengthInput"); // Input per la lunghezza
+const outputPass = document.querySelector("#outputName");
+const copyBtn = document.querySelector("#copyBtn"); // Seleziona il pulsante "Copia"
+
+let currentPassword = ""; // Variabile per memorizzare l'ultima password generata
+
+// Seleziona il bottone e aggiungi un event listener 
+document.querySelector("#submitBtn").addEventListener("click", handleSubmit);
+copyBtn.addEventListener("click", copyPassword);
+
+
+// Funzione per ottenere un numero intero casuale tra Min e Max (inclusi)
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Funzione per generare un carattere speciale casuale
+function getRandomSpecialCharacter() {
+    const specialCharacters = "123456789ABCDEFGHILMNOPQRSTKJXY!@#$%^&*()_+[]{}|;:,.<>?";
+    const randomIndex = getRandomInt(0, specialCharacters.length - 1);
+    return specialCharacters[randomIndex];
+}
+
+// Funzione per validare l'input
+function validateInput(name, surname) {
+    if (!name || !surname) {
+        outputPass.textContent = "I campi non possono essere vuoti";
+        return false; // Restituisce false se l'input non è valido
+    }
+    return true; // Restituisce true se l'input è valido
+}
+
+// Funzione per ripulire il form
+function cleanForm() {
+    nameInput.value = "";
+    surnameInput.value = "";
+    lengthInput.value = 8; // Resetta la lunghezza a un valore di default
+}
+
+// Funzione per mescolare le lettere di una stringa
+function shuffleString(str) {
+    const arr = str.split(""); // Converte la stringa in un array di caratteri
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // Ottiene un indice casuale
+        [arr[i], arr[j]] = [arr[j], arr[i]]; // Scambia i caratteri
+    }
+    return arr.join(""); // Ritorna l'array come stringa
+}
+
+function isValidPassword(password) {
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{}|;:'",.<>?/\\-]).{8,}$/;
+    return passwordRegex.test(password);
+}
+
+// Funzione che gestisce il submit
+function handleSubmit() {
+    const name = nameInput.value.trim();
+    const surname = surnameInput.value.trim();
+    const length = parseInt(lengthInput.value); // Ottieni la lunghezza desiderata
+
+    if (!validateInput(name, surname)) {
+        return;
+    }
+
+    const Randomcharacter = getRandomSpecialCharacter(); // Genera il numero casuale come stringa
+    
+    // Genera la password
+    currentPassword = `${name}${surname}${Randomcharacter}`; // Aggiorna currentPassword
+    console.log(currentPassword);
+   
+    while(!isValidPassword(currentPassword)) {
+        console.log("Invalid");
+       currentPassword+= getRandomSpecialCharacter();
+      
+       currentPassword+= getRandomInt(10,99);
+    
+       console.log("qua", currentPassword);
+    }
+   /* 
+      */  
+    
+     let currentPasswordturn = '';
+    // Mescola la password finale
+    for(let i = currentPassword.length-1; i >= 0; i--){
+        currentPasswordturn += currentPassword[i];
+    }
+    console.log(currentPasswordturn);
+    
+    if (currentPasswordturn.length > length) {
+        
+        currentPasswordturn = currentPassword.substring(0, length );
+        
+    } 
+      // Se la password è più corta della lunghezza desiderata, aggiungi caratteri speciali
+      while (currentPasswordturn.length < length) {
+        currentPasswordturn += getRandomSpecialCharacter(); // Aggiunge un carattere speciale casuale
+    }
+  //  const shuffledPassword = shuffleString(currentPassword);
+    outputPass.textContent = `La tua password è: ${currentPasswordturn}`;
+   
+
+    cleanForm();
+    
+    // Mostra il pulsante "Copia"
+    copyBtn.style.display = "block";
+}
+
+// Funzione per copiare la password
+function copyPassword() {
+    if (currentPassword) {
+        navigator.clipboard.writeText(currentPassword)
+            .then(() => {
+                alert("Password copiata negli appunti!");
+            })
+            .catch(err => {
+                console.error("Errore nella copia: ", err);
+            });
+    } else {
+        alert("Genera prima una password!");
+    }
+}
